@@ -2,6 +2,9 @@ import dayjs from 'dayjs';
 import ProductInOrder from './ProductInOrder';
 const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
+import { firebase } from '../services/firebase';
+
+const db = firebase.firestore();
 
 export default function Order({
   order: { customerName, items, createdAt, id },
@@ -10,6 +13,7 @@ export default function Order({
     if (confirm('confirm ?')) {
       // update the order with the "ready" state
       // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
+      db.collection('orders').doc(id).update({ state: 'ready' });
     }
   };
 

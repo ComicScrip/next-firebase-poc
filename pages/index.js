@@ -33,13 +33,32 @@ export default function Home() {
   const handleOrderClick = ({ customerName }) => {
     if (cart.length) {
       // post a new order
-      // https://firebase.google.com/docs/firestore/manage-data/add-data
+      db.collection('orders')
+        .add({
+          customerName,
+          items: cart,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          state: 'pending',
+        })
+        .then((docRef) => {
+          notify('Thanks for your order, you will be nofified when its ready');
+          setCart([]);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
     }
   };
 
   useEffect(() => {
     // get products
-    // https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection
+    db.collection('products')
+      .get()
+      .then((querySnapshot) => {
+        setProducts(
+          querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        );
+      });
   }, []);
 
   return (
