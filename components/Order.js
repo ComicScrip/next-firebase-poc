@@ -7,7 +7,7 @@ import { firebase as fb } from '../services/firebase';
 const db = fb.firestore();
 
 export default function Order({
-  order: { customerName, items, createdAt, status, id },
+  order: { customerName, items, createdAt, id },
 }) {
   const setOrderReady = () => {
     if (confirm('confirm ?')) {

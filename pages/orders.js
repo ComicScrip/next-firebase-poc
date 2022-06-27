@@ -30,6 +30,7 @@ export default function Orders() {
 
   return (
     <Layout>
+      {!orders.length && <p>No orders yet</p>}
       {orders.map((o) => (
         <Order key={o.id} order={o} />
       ))}

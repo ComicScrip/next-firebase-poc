@@ -20,7 +20,6 @@ export default function Cart({
   const customerNameInput = watch('customerName');
 
   useEffect(() => {
-    console.log('persist', customerNameInput);
     if (customerNameInput) persistCustomerName(customerNameInput);
   }, [customerNameInput]);
 
