@@ -21,7 +21,7 @@ export default function Cart({
 
   useEffect(() => {
     if (customerNameInput) persistCustomerName(customerNameInput);
-  }, [customerNameInput]);
+  }, [customerNameInput, persistCustomerName]);
 
   const chekoutEnabled = !!customerName && items.length;
 
