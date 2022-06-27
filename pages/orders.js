@@ -1,31 +1,13 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Order from '../components/Order';
-import { firebase as fb } from '../services/firebase';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = fb
-      .firestore()
-      .collection('orders')
-      .where('state', '==', 'pending')
-      .orderBy('createdAt', 'asc')
-      .onSnapshot((s) => {
-        setOrders(
-          s.docs.map((order) => {
-            const data = order.data();
-            return {
-              ...data,
-              id: order.id,
-              createdAt: data.createdAt.seconds * 1000,
-            };
-          })
-        );
-      });
-
-    return () => unsubscribe();
+    // get pending orders sorted by createdAt
+    // https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection
   }, []);
 
   return (

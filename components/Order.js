@@ -2,16 +2,14 @@ import dayjs from 'dayjs';
 import ProductInOrder from './ProductInOrder';
 const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
-import { firebase as fb } from '../services/firebase';
-
-const db = fb.firestore();
 
 export default function Order({
   order: { customerName, items, createdAt, id },
 }) {
   const setOrderReady = () => {
     if (confirm('confirm ?')) {
-      db.collection('orders').doc(id).update({ state: 'ready' });
+      // update the order with the "ready" state
+      // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
     }
   };
 

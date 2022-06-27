@@ -31,31 +31,15 @@ export default function Home() {
   };
 
   const handleOrderClick = ({ customerName }) => {
-    if (cart.length)
-      db.collection('orders')
-        .add({
-          customerName,
-          state: 'pending',
-          items: cart,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        })
-        .then(() => {
-          notify("Thanks for your order ! We'll let you know when it's ready");
-          setCart([]);
-        });
+    if (cart.length) {
+      // post a new order
+      // https://firebase.google.com/docs/firestore/manage-data/add-data
+    }
   };
 
   useEffect(() => {
-    db.collection('products')
-      .get()
-      .then((s) => {
-        setProducts(
-          s.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        );
-      });
+    // get products
+    // https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection
   }, []);
 
   return (
