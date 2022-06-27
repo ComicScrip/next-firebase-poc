@@ -9,24 +9,10 @@ const notify = (message) => toast(message);
 
 const db = firebase.firestore();
 
-// Get registration token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
-
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [cartIsOpen, setCartIsOpen] = useState(false);
-
-  useEffect(() => {
-    /*
-    firebaseCloudMessaging.init().then((messaging) => {
-      console.log('ok');
-      messaging.onMessage((message) => {
-        console.log('received message :', message);
-      });
-    });
-    */
-  }, []);
 
   const setCartQuantity = (product, quantity = 1) => {
     const alreadyInCart = cart.find(({ product: { id } }) => product.id === id);

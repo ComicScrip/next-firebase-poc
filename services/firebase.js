@@ -1,6 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import 'firebase/messaging';
+import 'firebase/firestore';
+import firebase from 'firebase/app';
+import localforage from 'localforage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDf9G8VZbcyJ5KSybm0VBLmLthFuvkHrcc',
@@ -12,6 +13,42 @@ const firebaseConfig = {
   measurementId: 'G-RLW6DXV66D',
 };
 
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const messaging = {
+  init: async () => {
+    // Initialize the Firebase app with the credentials
+    if (!firebase?.apps?.length) firebase?.initializeApp(firebaseConfig);
 
-export { firebase };
+    try {
+      const messaging = firebase.messaging();
+      const tokenInLocalForage = await localforage.getItem('fcm_token');
+
+      // Return the token if it is alredy in our local storage
+      if (tokenInLocalForage !== null) {
+        return tokenInLocalForage;
+      }
+
+      // Request the push notification permission from browser
+      const status = await Notification.requestPermission();
+      if (status && status === 'granted') {
+        // Get new token from Firebase
+        const fcm_token = await messaging.getToken({
+          vapidKey:
+            'BDc8b8HfoFBn_pM3GHR0BwGwipbCeOugQCsoUz22s7d0Mchiuvnk-g-j0-Kna6dbmiitur7YlwL_o7ks2-62ZiA',
+        });
+
+        // Set token in our local storage
+        if (fcm_token) {
+          localforage.setItem('fcm_token', fcm_token);
+          return fcm_token;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+};
+
+if (!firebase?.apps?.length) firebase?.initializeApp(firebaseConfig);
+
+export { messaging, firebase };
