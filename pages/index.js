@@ -90,7 +90,45 @@ export default function Home() {
     <Layout>
       <div onClick={() => setCartIsOpen(false)}>
         <Toaster position='bottom-center' />
-        <div className={`${cartIsOpen ? 'h-[40%]' : 'h-[90%]'}`}>
+        <div>
+          {products.map((p) => {
+            const inCart = cart.find(({ product: { id } }) => id === p.id);
+            return (
+              <Product
+                key={p.id}
+                product={p}
+                quantity={inCart?.quantity}
+                increaseQuantity={() =>
+                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
+                }
+                decreaseQuantity={() =>
+                  setCartQuantity(
+                    p,
+                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
+                  )
+                }
+              />
+            );
+          })}
+          {products.map((p) => {
+            const inCart = cart.find(({ product: { id } }) => id === p.id);
+            return (
+              <Product
+                key={p.id}
+                product={p}
+                quantity={inCart?.quantity}
+                increaseQuantity={() =>
+                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
+                }
+                decreaseQuantity={() =>
+                  setCartQuantity(
+                    p,
+                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
+                  )
+                }
+              />
+            );
+          })}
           {products.map((p) => {
             const inCart = cart.find(({ product: { id } }) => id === p.id);
             return (

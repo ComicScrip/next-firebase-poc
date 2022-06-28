@@ -35,18 +35,13 @@ export default function Cart({
   return (
     <div
       className={`shadow-lg box-content transition-all absolute ${
-        isOpen ? 'h-[75%]' : 'h-[80px]'
+        isOpen ? 'h-[100%]' : 'h-[80px]'
       }  bottom-0 w-full bg-gray-100 max-w-[800px] rounded-md overflow-hidden`}
     >
+      <div className='flex flex-col'></div>
       <div
         className='w-full border-b text-start cursor-pointer flex justify-between px-[20px] pt-[30px] pb-[25px]'
-        onClick={() => {
-          if (isOpen) {
-            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-            if (!customerName) setFocus('customerName');
-          }
-          onClick();
-        }}
+        onClick={onClick}
       >
         <div className='flex'>
           <div
@@ -75,7 +70,8 @@ export default function Cart({
           </button>
         </div>
       </div>
-      <div className='relative overflow-y-scroll h-[80%] pb-2'>
+
+      <div className='overflow-y-scroll h-[75%] pb-2'>
         <form className='p-[20px]' onSubmit={handleSubmit(onOrder)}>
           {items.map(({ product, quantity }) => {
             const inCart = items.find(
@@ -111,15 +107,16 @@ export default function Cart({
               id='customerName'
             />
           </label>
-
-          <button
-            ref={bottomRef}
-            className={`p-2 block bg-green-500 rounded-lg text-white font-semibold px-3 mt-4 w-full ${
-              !chekoutEnabled ? 'opacity-70' : 'opacity-100'
-            }`}
-          >
-            Confirm your order
-          </button>
+          {isOpen && (
+            <button
+              ref={bottomRef}
+              className={` absolute bottom-4 p-2 block bg-green-500 rounded-lg text-white font-semibold px-3 mt-4 w-[90vw] ${
+                !chekoutEnabled ? 'opacity-70' : 'opacity-100'
+              }`}
+            >
+              Confirm your order
+            </button>
+          )}
         </form>
       </div>
     </div>

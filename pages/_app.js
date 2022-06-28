@@ -2,7 +2,7 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div className='h-[100vh] overflow-scroll overflow-y-scroll'>
+    <div className='h-[90vh] overflow-y-scroll'>
       <Component {...pageProps} />
     </div>
   );
