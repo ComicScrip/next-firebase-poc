@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import { firebase } from '../services/firebase';
+import { firebase, messaging } from '../services/firebase';
 import Product from '../components/Product';
 import Cart from '../components/Cart';
 import toast, { Toaster } from 'react-hot-toast';
@@ -13,6 +13,29 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [cartIsOpen, setCartIsOpen] = useState(false);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    messaging.init().then((t) => {
+      /*
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          console.log('event for the service worker', event);
+        });
+      }
+      */
+      console.log('fcm token', t);
+      if (t) {
+        setToken(t);
+        // hanlde notifications in the foreground
+        firebase.messaging().onMessage((payload) => {
+          notify(
+            `${payload.notification.title} - ${payload.notification.body}`
+          );
+        });
+      }
+    });
+  }, []);
 
   const setCartQuantity = (product, quantity = 1) => {
     const alreadyInCart = cart.find(({ product: { id } }) => product.id === id);
@@ -31,32 +54,30 @@ export default function Home() {
   };
 
   const handleOrderClick = ({ customerName }) => {
-    if (cart.length) {
-      // post a new order
+    if (cart.length)
       db.collection('orders')
         .add({
           customerName,
+          state: 'pending',
           items: cart,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          state: 'pending',
+          customerToken: token,
         })
-        .then((docRef) => {
-          notify('Thanks for your order, you will be nofified when its ready');
+        .then(() => {
+          notify("Thanks for your order ! We'll let you know when it's ready");
           setCart([]);
-        })
-        .catch((error) => {
-          console.error('Error adding document: ', error);
         });
-    }
   };
 
   useEffect(() => {
-    // get products
     db.collection('products')
       .get()
-      .then((querySnapshot) => {
+      .then((s) => {
         setProducts(
-          querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+          s.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
         );
       });
   }, []);
@@ -64,7 +85,7 @@ export default function Home() {
   return (
     <Layout>
       <Toaster position='bottom-center' />
-      <div className={`${cartIsOpen ? 'h-[50vh]' : 'h-[90vh]'}`}>
+      <div className={`${cartIsOpen ? 'h-[40vh]' : 'h-[90vh]'}`}>
         {products.map((p) => {
           const inCart = cart.find(({ product: { id } }) => id === p.id);
           return (
@@ -84,7 +105,7 @@ export default function Home() {
             />
           );
         })}
-        <div className={`${cartIsOpen ? 'h-[45vh]' : 'h-[100px]'}`}></div>
+        <div className={`${cartIsOpen ? 'h-[65vh]' : 'h-[100px]'}`}></div>
       </div>
 
       <Cart

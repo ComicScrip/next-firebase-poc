@@ -20,7 +20,7 @@ export default function Cart({
   const customerNameInput = watch('customerName');
 
   useEffect(() => {
-    if (customerNameInput) persistCustomerName(customerNameInput);
+    persistCustomerName(customerNameInput);
   }, [customerNameInput, persistCustomerName]);
 
   const chekoutEnabled = !!customerName && items.length;
@@ -35,7 +35,7 @@ export default function Cart({
   return (
     <div
       className={`shadow-lg box-content transition-all absolute ${
-        isOpen ? 'h-[40vh]' : 'h-[80px]'
+        isOpen ? 'h-[60vh]' : 'h-[80px]'
       }  bottom-0 w-full bg-gray-100 max-w-[800px] rounded-md overflow-hidden`}
     >
       <div
@@ -64,7 +64,7 @@ export default function Cart({
                 <span className='font-semibold'>${totalPrice}</span>
               </>
             ) : (
-              'Click on "+" to add items'
+              'Click on "+"'
             )}
           </p>
 
@@ -99,7 +99,7 @@ export default function Cart({
             );
           })}
           {items.length === 0 && (
-            <div className='mt-4 mb-12'>Nothing was ordered so far.</div>
+            <div className='mt-4 mb-12'>Nothing was ordered so far</div>
           )}
 
           <label htmlFor='customerName'>

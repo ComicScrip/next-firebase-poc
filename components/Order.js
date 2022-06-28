@@ -1,19 +1,26 @@
 import dayjs from 'dayjs';
+import axios from 'axios';
 import ProductInOrder from './ProductInOrder';
+import { firebase } from '../services/firebase';
+
 const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
-import { firebase } from '../services/firebase';
 
 const db = firebase.firestore();
 
 export default function Order({
-  order: { customerName, items, createdAt, id },
+  order: { customerName, items, createdAt, id, customerToken },
 }) {
   const setOrderReady = () => {
     if (confirm('confirm ?')) {
       // update the order with the "ready" state
       // https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
       db.collection('orders').doc(id).update({ state: 'ready' });
+      axios.post('/api/notifications', {
+        token: customerToken,
+        title: 'Your order is ready 🤩',
+        body: 'You can come pick up your order',
+      });
     }
   };
 
@@ -39,7 +46,7 @@ export default function Order({
             className='bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg'
             type='button'
           >
-            {"It's Ready !"}
+            {'Ready !'}
           </button>
         </div>
       </div>
