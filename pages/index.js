@@ -110,44 +110,6 @@ export default function Home() {
               />
             );
           })}
-          {products.map((p) => {
-            const inCart = cart.find(({ product: { id } }) => id === p.id);
-            return (
-              <Product
-                key={p.id}
-                product={p}
-                quantity={inCart?.quantity}
-                increaseQuantity={() =>
-                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
-                }
-                decreaseQuantity={() =>
-                  setCartQuantity(
-                    p,
-                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
-                  )
-                }
-              />
-            );
-          })}
-          {products.map((p) => {
-            const inCart = cart.find(({ product: { id } }) => id === p.id);
-            return (
-              <Product
-                key={p.id}
-                product={p}
-                quantity={inCart?.quantity}
-                increaseQuantity={() =>
-                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
-                }
-                decreaseQuantity={() =>
-                  setCartQuantity(
-                    p,
-                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
-                  )
-                }
-              />
-            );
-          })}
           <div className={`${cartIsOpen ? 'h-[65%]' : 'h-[100px]'}`}></div>
         </div>
       </div>
