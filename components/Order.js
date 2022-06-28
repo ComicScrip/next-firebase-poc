@@ -18,7 +18,7 @@ export default function Order({
       db.collection('orders').doc(id).update({ state: 'ready' });
       axios.post('/api/notifications', {
         token: customerToken,
-        title: 'Your order is ready 🤩',
+        title: "It's ready 🤩",
         body: 'You can come pick up your order',
       });
     }

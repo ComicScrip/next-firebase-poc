@@ -82,36 +82,82 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    if (cart.length === 0) setCartIsOpen(false);
+  }, [cart.length]);
+
   return (
     <Layout>
-      <Toaster position='bottom-center' />
-      <div className={`${cartIsOpen ? 'h-[40vh]' : 'h-[90vh]'}`}>
-        {products.map((p) => {
-          const inCart = cart.find(({ product: { id } }) => id === p.id);
-          return (
-            <Product
-              key={p.id}
-              product={p}
-              quantity={inCart?.quantity}
-              increaseQuantity={() =>
-                setCartQuantity(p, (inCart?.quantity || 0) + 1)
-              }
-              decreaseQuantity={() =>
-                setCartQuantity(
-                  p,
-                  inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
-                )
-              }
-            />
-          );
-        })}
-        <div className={`${cartIsOpen ? 'h-[65vh]' : 'h-[100px]'}`}></div>
+      <div onClick={() => setCartIsOpen(false)}>
+        <Toaster position='bottom-center' />
+        <div>
+          {products.map((p) => {
+            const inCart = cart.find(({ product: { id } }) => id === p.id);
+            return (
+              <Product
+                key={p.id}
+                product={p}
+                quantity={inCart?.quantity}
+                increaseQuantity={() =>
+                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
+                }
+                decreaseQuantity={() =>
+                  setCartQuantity(
+                    p,
+                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
+                  )
+                }
+              />
+            );
+          })}
+          {products.map((p) => {
+            const inCart = cart.find(({ product: { id } }) => id === p.id);
+            return (
+              <Product
+                key={p.id}
+                product={p}
+                quantity={inCart?.quantity}
+                increaseQuantity={() =>
+                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
+                }
+                decreaseQuantity={() =>
+                  setCartQuantity(
+                    p,
+                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
+                  )
+                }
+              />
+            );
+          })}
+          {products.map((p) => {
+            const inCart = cart.find(({ product: { id } }) => id === p.id);
+            return (
+              <Product
+                key={p.id}
+                product={p}
+                quantity={inCart?.quantity}
+                increaseQuantity={() =>
+                  setCartQuantity(p, (inCart?.quantity || 0) + 1)
+                }
+                decreaseQuantity={() =>
+                  setCartQuantity(
+                    p,
+                    inCart?.quantity === 1 ? 0 : inCart?.quantity - 1
+                  )
+                }
+              />
+            );
+          })}
+          <div className={`${cartIsOpen ? 'h-[65%]' : 'h-[100px]'}`}></div>
+        </div>
       </div>
 
       <Cart
         items={cart}
         onOrder={handleOrderClick}
-        onClick={() => setCartIsOpen((open) => !open)}
+        onClick={() => {
+          if (cart.length) setCartIsOpen((open) => !open);
+        }}
         isOpen={cartIsOpen}
         setCartQuantity={setCartQuantity}
       />
