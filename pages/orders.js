@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Order from '../components/Order';
-import { firebase } from '../services/firebase';
-
-const db = firebase.firestore();
+import { firebase as fb } from '../services/firebase';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    // get pending orders sorted by createdAt
-    // https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection
-    const unsubscribe = db
+    const unsubscribe = fb
+      .firestore()
       .collection('orders')
       .where('state', '==', 'pending')
       .orderBy('createdAt', 'asc')
       .onSnapshot((s) => {
         setOrders(
-          s.docs.map((o) => {
-            const data = o.data();
-            console.log(data);
+          s.docs.map((order) => {
+            const data = order.data();
             return {
-              id: o.id,
               ...data,
+              id: order.id,
               createdAt: data.createdAt.seconds * 1000,
             };
           })
@@ -34,7 +30,6 @@ export default function Orders() {
 
   return (
     <Layout>
-      {!orders.length && <p>No orders yet</p>}
       {orders.map((o) => (
         <Order key={o.id} order={o} />
       ))}
