@@ -110,7 +110,7 @@ export default function Cart({
           {isOpen && (
             <button
               ref={bottomRef}
-              className={` absolute bottom-4 p-2 block bg-green-500 rounded-lg text-white font-semibold px-3 mt-4 w-[90vw] ${
+              className={` absolute bottom-4 p-2 block bg-green-500 rounded-lg text-white font-semibold px-3 mt-4 w-[90vw] max-w-[760px] ${
                 !chekoutEnabled ? 'opacity-70' : 'opacity-100'
               }`}
             >
